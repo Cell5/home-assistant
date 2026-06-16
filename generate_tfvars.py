@@ -52,7 +52,7 @@ def prompt_value(name: str, raw_value: str, value_type: type) -> str:
         if not value:
             return raw_value
         return str(int(value))
-    prompt = f"Enter value for {name} [{raw_value.strip('"')}]: "
+    prompt = f'Enter value for {name} [{raw_value.strip("\"")}]: '
     value = input(prompt).strip()
     return f'"{value or raw_value.strip("\"")}"'
 
