@@ -48,12 +48,12 @@ resource "docker_container" "mqtt" {
 
   ports {
     internal = 1883
-    external = 1883
+    external = var.mqtt_port
   }
 
   ports {
     internal = 9001
-    external = 9001
+    external = var.mqtt_websocket_port
   }
 
   networks_advanced {
@@ -74,7 +74,7 @@ resource "docker_container" "zigbee2mqtt" {
 
   ports {
     internal = 8080
-    external = 8080
+    external = var.zigbee_port
   }
 
   env = [
@@ -103,7 +103,7 @@ resource "docker_container" "homeassistant" {
 
   ports {
     internal = 8123
-    external = 8123
+    external = var.homeassistant_port
   }
 
   env = [

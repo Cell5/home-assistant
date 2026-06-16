@@ -19,19 +19,27 @@ This folder contains deployment infrastructure for a Home Assistant Docker stack
 
 ## Quick start
 
-1. Provision infrastructure with Terraform:
+1. Generate a private Terraform variable file from the example and keep it out of source control:
+
+    ```bash
+    python home-assistant/generate_tfvars.py --terraform-dir home-assistant/terraform
+    ```
+
+    If `terraform/terraform.tfvars` already exists, run with `--force` to overwrite.
+
+2. Provision infrastructure with Terraform:
 
     ```bash
     python home-assistant/terraform_apply.py --terraform-dir home-assistant/terraform
     ```
 
-2. Generate and deploy the stack:
+3. Generate and deploy the stack:
 
     ```bash
     python home-assistant/deploy_stack.py --stack-name home-assistant --zigbee-device /dev/ttyUSB0 --up
     ```
 
-3. Access Home Assistant at `http://localhost:8123`.
+4. Access Home Assistant at `http://localhost:8123`.
 
 ## Notes
 

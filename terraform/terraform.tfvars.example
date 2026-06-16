@@ -1,0 +1,19 @@
+# Example Terraform variable file for local/private configuration
+
+# Set your local Docker host if not using the default socket
+# docker_host = "unix:///var/run/docker.sock"
+
+# Override ports if the defaults collide with other services
+# homeassistant_port = 8123
+# mqtt_port = 1883
+# mqtt_websocket_port = 9001
+# zigbee_port = 8080
+
+# Add your Zigbee device path(s) here
+# zigbee_devices = ["/dev/ttyUSB0"]
+
+# If you need a different stack prefix than the default
+# stack_name = "home-assistant"
+
+# Set a different timezone if desired
+# timezone = "Europe/Berlin"

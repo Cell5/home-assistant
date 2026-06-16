@@ -40,6 +40,30 @@ variable "mqtt_broker_name" {
   default     = "mqtt"
 }
 
+variable "homeassistant_port" {
+  description = "Host port published for Home Assistant"
+  type        = number
+  default     = 8123
+}
+
+variable "mqtt_port" {
+  description = "Host port published for MQTT broker"
+  type        = number
+  default     = 1883
+}
+
+variable "mqtt_websocket_port" {
+  description = "Host port published for MQTT WebSockets"
+  type        = number
+  default     = 9001
+}
+
+variable "zigbee_port" {
+  description = "Host port published for Zigbee2MQTT dashboard"
+  type        = number
+  default     = 8080
+}
+
 variable "zigbee_devices" {
   description = "List of host Zigbee device paths exposed to the Zigbee2MQTT container"
   type        = list(string)

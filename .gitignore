@@ -3,3 +3,13 @@ docker-compose.yaml
 config/
 mosquitto/
 zigbee2mqtt/
+
+# Ignore Terraform local variable and state files
+terraform/terraform.tfvars
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/.terraform/
+
+# Ignore python related data 
+__pycache__/
+.mypy_cache/
