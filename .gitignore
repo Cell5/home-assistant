@@ -1,0 +1,5 @@
+# Ignore generated Docker Compose artifacts and runtime data
+docker-compose.yaml
+config/
+mosquitto/
+zigbee2mqtt/
