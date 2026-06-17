@@ -31,6 +31,8 @@ This folder contains deployment infrastructure for a Home Assistant Docker stack
 
     ```bash
     python terraform_apply.py --terraform-dir terraform
+    # or specify terraform binary location if it is not in the PATH
+    python terraform_apply.py --terraform-dir terraform --terraform-bin /path/to/terraform/bin
     ```
 
 3. Generate and deploy the stack:
