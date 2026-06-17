@@ -5,10 +5,11 @@ mosquitto/
 zigbee2mqtt/
 
 # Ignore Terraform local variable and state files
+terraform/.terraform/
+terraform/.terraform.lock.hcl
 terraform/terraform.tfvars
 terraform/terraform.tfstate
 terraform/terraform.tfstate.backup
-terraform/.terraform/
 
 # Ignore python related data 
 __pycache__/
