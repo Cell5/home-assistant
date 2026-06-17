@@ -95,9 +95,8 @@ resource "docker_container" "zigbee2mqtt" {
   dynamic "devices" {
     for_each = var.zigbee_devices
     content {
-      host_path      = devices.value.host_path
-      container_path = lookup(devices.value, "container_path", null)
-      permissions    = lookup(devices.value, "permissions", "rwm")
+      host_path      = devices.value
+      container_path = devices.value
     }
   }
   depends_on = [docker_container.mqtt]
