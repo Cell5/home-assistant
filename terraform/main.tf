@@ -43,7 +43,7 @@ resource "docker_image" "mosquitto" {
 
 resource "docker_container" "mqtt" {
   name  = "${var.stack_name}_mqtt"
-  image = docker_image.mosquitto.latest
+  image = docker_image.mosquitto.name
   restart = "always"
 
   ports {
@@ -69,7 +69,7 @@ resource "docker_container" "mqtt" {
 
 resource "docker_container" "zigbee2mqtt" {
   name  = "${var.stack_name}_zigbee2mqtt"
-  image = docker_image.zigbee2mqtt.latest
+  image = docker_image.zigbee2mqtt.name
   restart = "always"
 
   ports {
@@ -98,7 +98,7 @@ resource "docker_container" "zigbee2mqtt" {
 
 resource "docker_container" "homeassistant" {
   name  = "${var.stack_name}_homeassistant"
-  image = docker_image.homeassistant.latest
+  image = docker_image.homeassistant.name
   restart = "always"
 
   ports {
