@@ -39,7 +39,7 @@ This folder contains deployment infrastructure for a Home Assistant Docker stack
 3. Generate and deploy the stack with Docker Compose:
 
     ```bash
-    python deploy_stack.py --stack-name home-assistant --zigbee-device /dev/ttyUSB0 --up
+    python home-assistant/deploy_stack.py --stack-name home-assistant --zigbee-device /dev/ttyUSB0 --up
     ```
 
 4. Access Home Assistant at `http://localhost:8123`.
