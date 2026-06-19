@@ -13,7 +13,7 @@ This folder contains deployment infrastructure for a Home Assistant Docker stack
 ## Requirements
 
 - Docker with `docker compose` support
-- Terraform 1.3+ with Docker provider
+- Terraform 1.3+ with Docker provider ([Install Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli))
 - Python 3.10+
 - Jenkins agent with Docker and Terraform installed for CI
 
@@ -22,7 +22,7 @@ This folder contains deployment infrastructure for a Home Assistant Docker stack
 1. Generate a private Terraform variable file from the example and keep it out of source control:
 
     ```bash
-    python generate_tfvars.py --terraform-dir terraform
+    python home-assistant/generate_tfvars.py --terraform-dir terraform
     ```
 
     If `terraform/terraform.tfvars` already exists, run with `--force` to overwrite.
@@ -30,12 +30,16 @@ This folder contains deployment infrastructure for a Home Assistant Docker stack
 2. Provision infrastructure with Terraform:
 
     ```bash
-    python terraform_apply.py --terraform-dir terraform
+    python terraform_apply.py --terraform-dir home-assistant/terraform
     # or specify terraform binary location if it is not in the PATH
-    python terraform_apply.py --terraform-dir terraform --terraform-bin /path/to/terraform/bin
+    python terraform_apply.py --terraform-dir home-assistant/terraform --terraform-bin /path/to/terraform/bin
     ```
 
-3. Generate and deploy the stack:
+    This creates the Docker network, volumes, and pulls any required images. It does not start the application containers.
+
+    Optionally, Terraform can also provision a Jenkins container to run pipelines. If you set `jenkins_image` and ports in `terraform/terraform.tfvars`, Terraform will create a `jenkins` container attached to the same network.
+
+3. Generate and deploy the stack with Docker Compose:
 
     ```bash
     python deploy_stack.py --stack-name home-assistant --zigbee-device /dev/ttyUSB0 --up

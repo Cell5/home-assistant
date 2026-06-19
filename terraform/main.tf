@@ -41,90 +41,36 @@ resource "docker_image" "mosquitto" {
   name = var.mosquitto_image
 }
 
-resource "docker_container" "mqtt" {
-  name  = "${var.stack_name}_mqtt"
-  image = docker_image.mosquitto.name
-  restart = "always"
-
-  ports {
-    internal = 1883
-    external = var.mqtt_port
-  }
-
-  ports {
-    internal = 9001
-    external = var.mqtt_websocket_port
-  }
-
-  networks_advanced {
-    name = docker_network.hass.name
-  }
-
-  mounts {
-    target = "/mosquitto/data"
-    source = docker_volume.mosquitto_data.name
-    type   = "volume"
-  }
+resource "docker_image" "jenkins" {
+  name = var.jenkins_image
 }
 
-resource "docker_container" "zigbee2mqtt" {
-  name  = "${var.stack_name}_zigbee2mqtt"
-  image = docker_image.zigbee2mqtt.name
+resource "docker_volume" "jenkins_home" {
+  name = "${var.stack_name}_jenkins_home"
+}
+
+resource "docker_container" "jenkins" {
+  name  = "${var.stack_name}_jenkins"
+  image = docker_image.jenkins.name
   restart = "always"
 
   ports {
     internal = 8080
-    external = var.zigbee_port
+    external = var.jenkins_http_port
   }
-
-  env = [
-    "TZ=${var.timezone}",
-    "MQTT_SERVER=tcp://${var.mqtt_broker_name}:1883",
-  ]
-
-  networks_advanced {
-    name = docker_network.hass.name
-  }
-
-  mounts {
-    target = "/app/data"
-    source = docker_volume.zigbee2mqtt_data.name
-    type   = "volume"
-  }
-
-  dynamic "devices" {
-    for_each = var.zigbee_devices
-    content {
-      host_path      = devices.value
-      container_path = devices.value
-    }
-  }
-  depends_on = [docker_container.mqtt]
-}
-
-resource "docker_container" "homeassistant" {
-  name  = "${var.stack_name}_homeassistant"
-  image = docker_image.homeassistant.name
-  restart = "always"
 
   ports {
-    internal = 8123
-    external = var.homeassistant_port
+    internal = 50000
+    external = var.jenkins_agent_port
   }
-
-  env = [
-    "TZ=${var.timezone}",
-  ]
 
   networks_advanced {
     name = docker_network.hass.name
   }
 
   mounts {
-    target = "/config"
-    source = docker_volume.homeassistant_config.name
+    target = "/var/jenkins_home"
+    source = docker_volume.jenkins_home.name
     type   = "volume"
   }
-
-  depends_on = [docker_container.zigbee2mqtt]
 }
