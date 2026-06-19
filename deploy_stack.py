@@ -139,10 +139,10 @@ def parse_args():
     parser.add_argument('--zigbee-device', default='', help='Host Zigbee adapter device path (e.g. /dev/ttyACM0)')
     parser.add_argument('--tfvars', default=TFVARS_DEFAULT, help='Path to terraform.tfvars with deployment variables')
     parser.add_argument('--compose-output', default='docker-compose.yaml', help='Output Compose file path')
-    parser.add_argument('--config-dir', default='home-assistant/config', help='Host config directory for Home Assistant')
-    parser.add_argument('--mqtt-data', default='home-assistant/mosquitto/data', help='Host directory for MQTT broker data')
-    parser.add_argument('--mqtt-log', default='home-assistant/mosquitto/log', help='Host directory for MQTT broker logs')
-    parser.add_argument('--zigbee-data', default='home-assistant/zigbee2mqtt/data', help='Host directory for Zigbee2MQTT data')
+    parser.add_argument('--config-dir', default='hass/config', help='Host config directory for Home Assistant')
+    parser.add_argument('--mqtt-data', default='hass/mosquitto/data', help='Host directory for MQTT broker data')
+    parser.add_argument('--mqtt-log', default='hass/mosquitto/log', help='Host directory for MQTT broker logs')
+    parser.add_argument('--zigbee-data', default='hass/zigbee2mqtt/data', help='Host directory for Zigbee2MQTT data')
     parser.add_argument('--up', action='store_true', help='Run docker compose up after generating the file')
     return parser.parse_args()
 
@@ -173,7 +173,7 @@ def main():
         'homeassistant_port': tfvars_values.get('homeassistant_port', 8123),
         'mqtt_port': tfvars_values.get('mqtt_port', 1883),
         'mqtt_websocket_port': tfvars_values.get('mqtt_websocket_port', 9001),
-        'zigbee_port': tfvars_values.get('zigbee_port', 8080),
+        'zigbee_port': tfvars_values.get('zigbee_port', 8686),
     }
 
     stack_name = tfvars_values.get('stack_name', args.stack_name)
