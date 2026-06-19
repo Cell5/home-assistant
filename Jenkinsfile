@@ -4,6 +4,8 @@ pipeline {
   environment {
     TERRAFORM_DIR = 'terraform'
     PYTHON_SCRIPT = 'deploy_stack.py'
+    STACK_NAME = 'hass'
+    ZIGBEE_DEVICE = '/dev/ttyUSB0'
   }
 
   stages {
@@ -35,7 +37,7 @@ pipeline {
     }
     stage('Deploy Home Assistant Stack') {
       steps {
-        sh "python ${env.PYTHON_SCRIPT} --stack-name home-assistant --zigbee-device /dev/ttyUSB0 --up"
+        sh "python ${env.PYTHON_SCRIPT} --stack-name ${env.STACK_NAME} --zigbee-device ${env.ZIGBEE_DEVICE} --up"
       }
     }
   }
