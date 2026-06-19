@@ -10,5 +10,5 @@ output "woodpecker_container" {
 
 output "woodpecker_agent_secret" {
   value     = random_password.woodpecker_secret.result
-  sensitive = false
+  sensitive = true
 }
