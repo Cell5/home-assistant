@@ -52,6 +52,7 @@ resource "docker_volume" "jenkins_home" {
 resource "docker_container" "jenkins" {
   name  = "${var.stack_name}_jenkins"
   image = docker_image.jenkins.name
+  user  = "root" # needed for docker.sock access
   restart = "always"
 
   ports {
