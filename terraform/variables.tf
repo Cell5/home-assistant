@@ -7,7 +7,7 @@ variable "docker_host" {
 variable "stack_name" {
   description = "Prefix used for Docker resources"
   type        = string
-  default     = "home-assistant"
+  default     = "hass"
 }
 
 variable "timezone" {
@@ -68,4 +68,22 @@ variable "zigbee_devices" {
   description = "List of host Zigbee device paths exposed to the Zigbee2MQTT container"
   type        = list(string)
   default     = []
+}
+
+variable "jenkins_image" {
+  description = "Jenkins Docker image"
+  type        = string
+  default     = "jenkins/jenkins:lts"
+}
+
+variable "jenkins_http_port" {
+  description = "Host port published for Jenkins HTTP UI"
+  type        = number
+  default     = 9090
+}
+
+variable "jenkins_agent_port" {
+  description = "Host port published for Jenkins agent connections"
+  type        = number
+  default     = 50000
 }
