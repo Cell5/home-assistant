@@ -7,7 +7,7 @@
 # homeassistant_port = 8123
 # mqtt_port = 1883
 # mqtt_websocket_port = 9001
-# zigbee_port = 8080
+# zigbee_port = 8686
 # jenkins_http_port = 8282
 # jenkins_agent_port = 50000
 

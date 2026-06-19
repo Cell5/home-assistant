@@ -61,7 +61,7 @@ variable "mqtt_websocket_port" {
 variable "zigbee_port" {
   description = "Host port published for Zigbee2MQTT dashboard"
   type        = number
-  default     = 8080
+  default     = 8686
 }
 
 variable "zigbee_devices" {
