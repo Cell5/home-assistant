@@ -73,7 +73,7 @@ variable "zigbee_devices" {
 variable "woodpecker_image" {
   description = "Woodpecker server Docker image"
   type        = string
-  default     = "woodpeckerci/woodpecker-server:latest"
+  default     = "woodpeckerci/woodpecker-server:v3"
 }
 
 variable "woodpecker_port" {

@@ -14,7 +14,7 @@
 # homeassistant_image = "ghcr.io/home-assistant/home-assistant:stable"
 # zigbee2mqtt_image = "koenkk/zigbee2mqtt:latest"
 # mosquitto_image = "eclipse-mosquitto:latest"
-# woodpecker_image = "woodpeckerci/woodpecker-server:latest"
+# woodpecker_image = "woodpeckerci/woodpecker-server:v3"
 
 # mqtt_broker_name = "mqtt"
 
