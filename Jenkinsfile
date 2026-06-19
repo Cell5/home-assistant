@@ -2,8 +2,8 @@ pipeline {
   agent any
 
   environment {
-    TERRAFORM_DIR = 'home-assistant/terraform'
-    PYTHON_SCRIPT = 'home-assistant/deploy_stack.py'
+    TERRAFORM_DIR = 'terraform'
+    PYTHON_SCRIPT = 'deploy_stack.py'
   }
 
   stages {
@@ -42,7 +42,7 @@ pipeline {
 
   post {
     always {
-      archiveArtifacts artifacts: 'home-assistant/docker-compose.yaml', allowEmptyArchive: true
+      archiveArtifacts artifacts: 'docker-compose.yaml', allowEmptyArchive: true
     }
   }
 }
