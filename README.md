@@ -30,7 +30,7 @@ This folder contains deployment infrastructure for a Home Assistant Docker stack
 2. Provision infrastructure with Terraform:
 
     ```bash
-    python terraform_apply.py --terraform-dir home-assistant/terraform
+    python home-assistant/terraform_apply.py --terraform-dir home-assistant/terraform
     # or specify terraform binary location if it is not in the PATH
     python terraform_apply.py --terraform-dir home-assistant/terraform --terraform-bin /path/to/terraform/bin
     ```
