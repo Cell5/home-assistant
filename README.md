@@ -14,7 +14,7 @@ This folder contains deployment infrastructure for a Home Assistant Docker stack
 - Docker with `docker compose` support
 - Terraform 1.3+ with Docker provider ([Install Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli))
 - Python 3.10+
-- Woodpecker CI agent
+- Woodpecker CI cli
 
 ## Quick start
 
