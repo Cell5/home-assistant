@@ -69,3 +69,21 @@ variable "zigbee_devices" {
   type        = list(string)
   default     = []
 }
+
+variable "woodpecker_image" {
+  description = "Woodpecker server Docker image"
+  type        = string
+  default     = "woodpeckerci/woodpecker-server:latest"
+}
+
+variable "woodpecker_port" {
+  description = "Host port published for Woodpecker HTTP UI"
+  type        = number
+  default     = 8008
+}
+
+variable "woodpecker_data_volume" {
+  description = "Docker volume name for Woodpecker server data"
+  type        = string
+  default     = "woodpecker_data"
+}

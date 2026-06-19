@@ -8,11 +8,13 @@
 # mqtt_port = 1883
 # mqtt_websocket_port = 9001
 # zigbee_port = 8686
+# woodpecker_port = 8008
 
 # Override default container images or network names
 # homeassistant_image = "ghcr.io/home-assistant/home-assistant:stable"
 # zigbee2mqtt_image = "koenkk/zigbee2mqtt:latest"
 # mosquitto_image = "eclipse-mosquitto:latest"
+# woodpecker_image = "woodpeckerci/woodpecker-server:latest"
 
 # mqtt_broker_name = "mqtt"
 

@@ -1,0 +1,22 @@
+kind: pipeline
+name: default
+
+steps:
+  - name: terraform
+    image: hashicorp/terraform:1.3.0
+    commands:
+      - cd home-assistant/terraform
+      - terraform init -input=false
+      - terraform plan -out=tfplan -input=false
+      - terraform apply -input=false tfplan
+
+  - name: deploy
+    image: python:3.11-slim
+    commands:
+      - pip install --no-cache-dir --upgrade pip
+      - python home-assistant/deploy_stack.py --stack-name hass --zigbee-device /dev/ttyUSB0 --up
+
+trigger:
+  event:
+    - push
+    - pull_request
