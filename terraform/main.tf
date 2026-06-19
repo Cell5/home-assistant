@@ -73,4 +73,10 @@ resource "docker_container" "jenkins" {
     source = docker_volume.jenkins_home.name
     type   = "volume"
   }
+
+  mounts {
+    target = "/var/run/docker.sock"
+    source = "/var/run/docker.sock"
+    type   = "bind"
+  }
 }
