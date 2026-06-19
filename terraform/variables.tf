@@ -79,7 +79,7 @@ variable "jenkins_image" {
 variable "jenkins_http_port" {
   description = "Host port published for Jenkins HTTP UI"
   type        = number
-  default     = 9090
+  default     = 8282
 }
 
 variable "jenkins_agent_port" {

@@ -8,7 +8,7 @@
 # mqtt_port = 1883
 # mqtt_websocket_port = 9001
 # zigbee_port = 8080
-# jenkins_http_port = 9090
+# jenkins_http_port = 8282
 # jenkins_agent_port = 50000
 
 # Override default container images or network names
