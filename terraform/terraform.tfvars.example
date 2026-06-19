@@ -8,12 +8,22 @@
 # mqtt_port = 1883
 # mqtt_websocket_port = 9001
 # zigbee_port = 8080
+# jenkins_http_port = 9090
+# jenkins_agent_port = 50000
+
+# Override default container images or network names
+# homeassistant_image = "ghcr.io/home-assistant/home-assistant:stable"
+# zigbee2mqtt_image = "koenkk/zigbee2mqtt:latest"
+# mosquitto_image = "eclipse-mosquitto:latest"
+# jenkins_image = "jenkins/jenkins:lts"
+
+# mqtt_broker_name = "mqtt"
 
 # Add your Zigbee device path(s) here
 # zigbee_devices = ["/dev/ttyUSB0"]
 
 # If you need a different stack prefix than the default
-# stack_name = "home-assistant"
+# stack_name = "hass"
 
 # Set a different timezone if desired
 # timezone = "Europe/Berlin"
