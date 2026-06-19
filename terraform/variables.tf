@@ -69,21 +69,3 @@ variable "zigbee_devices" {
   type        = list(string)
   default     = []
 }
-
-variable "jenkins_image" {
-  description = "Jenkins Docker image"
-  type        = string
-  default     = "jenkins/jenkins:lts"
-}
-
-variable "jenkins_http_port" {
-  description = "Host port published for Jenkins HTTP UI"
-  type        = number
-  default     = 8282
-}
-
-variable "jenkins_agent_port" {
-  description = "Host port published for Jenkins agent connections"
-  type        = number
-  default     = 50000
-}

@@ -8,14 +8,11 @@
 # mqtt_port = 1883
 # mqtt_websocket_port = 9001
 # zigbee_port = 8686
-# jenkins_http_port = 8282
-# jenkins_agent_port = 50000
 
 # Override default container images or network names
 # homeassistant_image = "ghcr.io/home-assistant/home-assistant:stable"
 # zigbee2mqtt_image = "koenkk/zigbee2mqtt:latest"
 # mosquitto_image = "eclipse-mosquitto:latest"
-# jenkins_image = "jenkins/jenkins:lts"
 
 # mqtt_broker_name = "mqtt"
 
