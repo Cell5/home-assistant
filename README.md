@@ -4,7 +4,6 @@ This folder contains deployment infrastructure for a Home Assistant Docker stack
 
 ## Contents
 
-- `Jenkinsfile` - pipeline to run Terraform and deploy the Docker stack.
 - `deploy_stack.py` - Python script to generate a Docker Compose manifest and start the stack.
 - `terraform_apply.py` - Python wrapper to initialize and apply Terraform configuration.
 - `terraform/` - Terraform configuration to provision Docker network, volumes, and containers.
@@ -15,7 +14,7 @@ This folder contains deployment infrastructure for a Home Assistant Docker stack
 - Docker with `docker compose` support
 - Terraform 1.3+ with Docker provider ([Install Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli))
 - Python 3.10+
-- Jenkins agent with Docker and Terraform installed for CI
+- Woodpecker CI agent
 
 ## Quick start
 
@@ -36,8 +35,6 @@ This folder contains deployment infrastructure for a Home Assistant Docker stack
     ```
 
     This creates the Docker network, volumes, and pulls any required images. It does not start the application containers.
-
-    Optionally, Terraform can also provision a Jenkins container to run pipelines. If you set `jenkins_image` and ports in `terraform/terraform.tfvars`, Terraform will create a `jenkins` container attached to the same network.
 
 3. Generate and deploy the stack with Docker Compose:
 
