@@ -37,6 +37,9 @@ services:
 
   zigbee2mqtt:
     image: {zigbee2mqtt_image}
+    user: "1000:1000"
+    group_add:
+        - dialout
     container_name: {stack_name}_zigbee2mqtt
     restart: always
     depends_on:
@@ -110,7 +113,7 @@ def build_compose_content(
 ) -> str:
     devices_section = ''
     if zigbee_devices:
-        device_lines = '\n'.join(f'      - "{device}:{device}"' for device in zigbee_devices)
+        device_lines = '\n'.join(f'      - "{device}:/dev/ttyUSB0"' for device in zigbee_devices)
         devices_section = f'    devices:\n{device_lines}\n'
     return COMPOSE_TEMPLATE.format(
         homeassistant_image=image_names['homeassistant_image'],
