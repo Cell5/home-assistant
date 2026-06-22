@@ -2,9 +2,6 @@ import argparse
 import subprocess
 import sys
 import re
-import secrets
-import shutil
-import string
 from pathlib import Path
 import textwrap
 from typing import Any
@@ -68,16 +65,14 @@ TFVARS_DEFAULT = 'terraform/terraform.tfvars'
 TFVARS_PATTERN = re.compile(r'^\s*([a-zA-Z0-9_]+)\s*=\s*(.+)$')
 DEFAULT_MOSQUITTO_CONF = textwrap.dedent('''
     listener 1883
-    allow_anonymous false
-    password_file /mosquitto/config/password.txt
+    allow_anonymous true
 
     # Optional settings for persistence
+    # password_file /mosquitto/config/password.txt
     persistence true
     persistence_location /mosquitto/data/
     log_dest file /mosquitto/log/mosquitto.log
 ''')
-DEFAULT_MOSQUITTO_USER = 'mqtt'
-DEFAULT_MOSQUITTO_PASSWORD_LENGTH = 24
 
 
 def parse_tfvars(path: Path) -> dict[str, Any]:
@@ -104,20 +99,6 @@ def parse_tfvars(path: Path) -> dict[str, Any]:
             except ValueError:
                 values[key] = raw_value
     return values
-
-
-def generate_password(length: int = DEFAULT_MOSQUITTO_PASSWORD_LENGTH) -> str:
-    alphabet = string.ascii_letters + string.digits
-    return ''.join(secrets.choice(alphabet) for _ in range(length))
-
-
-def ensure_mosquitto_password_file(password_file: Path, username: str, password: str) -> None:
-    mosquitto_passwd = shutil.which('mosquitto_passwd')
-    if mosquitto_passwd is None:
-        raise RuntimeError(
-            'mosquitto_passwd utility not found. Install Mosquitto or create the password file manually.'
-        )
-    subprocess.run([mosquitto_passwd, '-b', str(password_file), username, password], check=True)
 
 
 def build_compose_content(
@@ -249,13 +230,6 @@ def main():
     if not mosquitto_conf_path.exists():
         mosquitto_conf_path.write_text(DEFAULT_MOSQUITTO_CONF, encoding='utf-8')
         print(f'Created default Mosquitto config at {mosquitto_conf_path}')
-
-    password_file = mqtt_config / 'password.txt'
-    if not password_file.exists():
-        password = generate_password()
-        ensure_mosquitto_password_file(password_file, DEFAULT_MOSQUITTO_USER, password)
-        print(f'Created Mosquitto password file at {password_file}')
-        print(f'Generated MQTT credentials: {DEFAULT_MOSQUITTO_USER}:{password}')
 
     compose_content = build_compose_content(
         stack_name=stack_name,
