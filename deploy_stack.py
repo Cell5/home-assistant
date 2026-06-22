@@ -59,6 +59,13 @@ networks:
 
 TFVARS_DEFAULT = 'terraform/terraform.tfvars'
 TFVARS_PATTERN = re.compile(r'^\s*([a-zA-Z0-9_]+)\s*=\s*(.+)$')
+DEFAULT_MOSQUITTO_CONF = textwrap.dedent('''
+    persistence true
+    persistence_location /mosquitto/data/
+    log_dest file /mosquitto/log/mosquitto.log
+    listener 1883
+    allow_anonymous true
+''')
 
 
 def parse_tfvars(path: Path) -> dict[str, Any]:
@@ -142,11 +149,11 @@ def parse_args():
     parser.add_argument('--zigbee-device', default='', help='Host Zigbee adapter device path (e.g. /dev/ttyACM0)')
     parser.add_argument('--tfvars', default=TFVARS_DEFAULT, help='Path to terraform.tfvars with deployment variables')
     parser.add_argument('--compose-output', default='docker-compose.yaml', help='Output Compose file path')
-    parser.add_argument('--config-dir', default='hass/config', help='Host config directory for Home Assistant')
-    parser.add_argument('--mqtt-config', default='hass/mosquitto/config', help='Host directory for MQTT broker configuration')
-    parser.add_argument('--mqtt-data', default='hass/mosquitto/data', help='Host directory for MQTT broker data')
-    parser.add_argument('--mqtt-log', default='hass/mosquitto/log', help='Host directory for MQTT broker logs')
-    parser.add_argument('--zigbee-data', default='hass/zigbee2mqtt/data', help='Host directory for Zigbee2MQTT data')
+    parser.add_argument('--config-dir', default=None, help='Host config directory for Home Assistant')
+    parser.add_argument('--mqtt-config', default=None, help='Host directory for MQTT broker configuration')
+    parser.add_argument('--mqtt-data', default=None, help='Host directory for MQTT broker data')
+    parser.add_argument('--mqtt-log', default=None, help='Host directory for MQTT broker logs')
+    parser.add_argument('--zigbee-data', default=None, help='Host directory for Zigbee2MQTT data')
     parser.add_argument('--up', action='store_true', help='Run docker compose up after generating the file')
     return parser.parse_args()
 
@@ -156,11 +163,6 @@ def main():
     base_dir = Path(__file__).resolve().parent
     tfvars_path = resolve_path(args.tfvars, base_dir)
     compose_path = resolve_path(args.compose_output, base_dir)
-    config_dir = resolve_path(args.config_dir, base_dir)
-    mqtt_config = resolve_path(args.mqtt_config, base_dir)
-    mqtt_data = resolve_path(args.mqtt_data, base_dir)
-    mqtt_log = resolve_path(args.mqtt_log, base_dir)
-    zigbee_data = resolve_path(args.zigbee_data, base_dir)
 
     if tfvars_path.exists():
         tfvars_values = parse_tfvars(tfvars_path)
@@ -190,11 +192,37 @@ def main():
     else:
         zigbee_devices = tfvars_values.get('zigbee_devices', [])
 
+    config_dir = resolve_path(
+        args.config_dir if args.config_dir else f'{stack_name}/config',
+        base_dir,
+    )
+    mqtt_config = resolve_path(
+        args.mqtt_config if args.mqtt_config else f'{stack_name}/mosquitto/config',
+        base_dir,
+    )
+    mqtt_data = resolve_path(
+        args.mqtt_data if args.mqtt_data else f'{stack_name}/mosquitto/data',
+        base_dir,
+    )
+    mqtt_log = resolve_path(
+        args.mqtt_log if args.mqtt_log else f'{stack_name}/mosquitto/log',
+        base_dir,
+    )
+    zigbee_data = resolve_path(
+        args.zigbee_data if args.zigbee_data else f'{stack_name}/zigbee2mqtt/data',
+        base_dir,
+    )
+
     config_dir.mkdir(parents=True, exist_ok=True)
     mqtt_config.mkdir(parents=True, exist_ok=True)
     mqtt_data.mkdir(parents=True, exist_ok=True)
     mqtt_log.mkdir(parents=True, exist_ok=True)
     zigbee_data.mkdir(parents=True, exist_ok=True)
+
+    mosquitto_conf_path = mqtt_config / 'mosquitto.conf'
+    if not mosquitto_conf_path.exists():
+        mosquitto_conf_path.write_text(DEFAULT_MOSQUITTO_CONF, encoding='utf-8')
+        print(f'Created default Mosquitto config at {mosquitto_conf_path}')
 
     compose_content = build_compose_content(
         stack_name=stack_name,
