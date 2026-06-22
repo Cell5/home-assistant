@@ -29,7 +29,7 @@ def run_terraform(directory: Path, terraform_bin: str, env: Dict[str, str]) -> N
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description='Run Terraform for Home Assistant Docker deployment.')
-    parser.add_argument('--terraform-dir', default='terraform', help='Terraform configuration directory')
+    parser.add_argument('--terraform-dir', default='home-assistant/terraform', help='Terraform configuration directory')
     parser.add_argument('--docker-host', default='', help='Optional DOCKER_HOST override for Terraform provider')
     parser.add_argument('--terraform-bin', default='terraform', help='Terraform binary or full path to terraform executable')
     return parser.parse_args()
