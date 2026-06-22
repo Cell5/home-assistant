@@ -48,6 +48,7 @@ services:
       - MQTT_SERVER=tcp://{mqtt_broker_name}:1883
     volumes:
       - {zigbee_data}:/app/data
+      - /run/udev:/run/udev:ro
     networks:
       - {network_name}
 {devices_section}
