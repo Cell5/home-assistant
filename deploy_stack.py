@@ -16,8 +16,11 @@ services:
       - mqtt
     ports:
       - "{homeassistant_port}:8123"
+    environment:
+      - TZ={timezone}
     volumes:
       - {config_dir}:/config
+      - /etc/localtime:/etc/localtime:ro
     networks:
       - {network_name}
 
@@ -28,6 +31,8 @@ services:
     ports:
       - "{mqtt_port}:1883"
       - "{mqtt_websocket_port}:9001"
+    environment:
+      - TZ={timezone}
     volumes:
       - {mqtt_config}:/mosquitto/config
       - {mqtt_data}:/mosquitto/data
@@ -39,7 +44,7 @@ services:
     image: {zigbee2mqtt_image}
     user: "1000:1000"
     group_add:
-        - dialout
+      - dialout
     container_name: {stack_name}_zigbee2mqtt
     restart: always
     depends_on:
@@ -72,6 +77,44 @@ DEFAULT_MOSQUITTO_CONF = textwrap.dedent('''
     persistence true
     persistence_location /mosquitto/data/
     log_dest file /mosquitto/log/mosquitto.log
+''')
+
+DEFAULT_HA_CONFIG = textwrap.dedent('''
+# Home Assistant default configuration
+# More info at https://home-assistant.io/docs/configuration/
+
+# Configure HTTP component with proxy settings
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - {gateway_ip}
+
+# Allows you to issue voice commands from the frontend
+conversation:
+
+# Enables support for tracking state changes over time
+history:
+
+# View all events in a logbook
+logbook:
+
+# Track the sun
+sun:
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
 ''')
 
 
@@ -148,6 +191,24 @@ def run_docker_compose(compose_file: Path) -> None:
 def resolve_path(path: str, base_dir: Path) -> Path:
     candidate = Path(path)
     return candidate.resolve() if candidate.is_absolute() else (base_dir / candidate).resolve()
+
+
+def get_network_gateway(network_name: str) -> str:
+    """Retrieve gateway IP from Docker network."""
+    try:
+        result = subprocess.run(
+            ['docker', 'network', 'inspect', network_name, '--format={{(index .IPAM.Config 0).Gateway}}'],
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+        gateway = result.stdout.strip()
+        if not gateway:
+            raise ValueError(f'No gateway found for network {network_name}')
+        return gateway
+    except subprocess.CalledProcessError as e:
+        print(f'Error inspecting Docker network {network_name}: {e.stderr}', file=sys.stderr)
+        raise
 
 
 def parse_args():
@@ -230,6 +291,15 @@ def main():
     if not mosquitto_conf_path.exists():
         mosquitto_conf_path.write_text(DEFAULT_MOSQUITTO_CONF, encoding='utf-8')
         print(f'Created default Mosquitto config at {mosquitto_conf_path}')
+
+    network_name = f'{stack_name}_network'
+    gateway_ip = get_network_gateway(network_name)
+
+    ha_config_path = config_dir / 'configuration.yaml'
+    if not ha_config_path.exists():
+        ha_config_content = DEFAULT_HA_CONFIG.format(gateway_ip=gateway_ip)
+        ha_config_path.write_text(ha_config_content, encoding='utf-8')
+        print(f'Created default Home Assistant config at {ha_config_path}')
 
     compose_content = build_compose_content(
         stack_name=stack_name,
